@@ -12,11 +12,33 @@ public class Archive {
         return projects.get(index - 1);
     }
 
-    public Task completeTaskInProject(int taskNumber, int projectNumber) {
-        checkIndex(taskNumber);
-        checkIndex(projectNumber);
+    public List<Project> getProjects() {
+        return projects;
+    }
 
-        return projects.get(projectNumber-1).completedTask(taskNumber-1);
+    public Task completeTaskInProject(int taskNumber, int projectNumber) {
+        try {
+            checkIsNotNull(projects);
+
+            checkIndex(projectNumber);
+
+            if (0 > taskNumber - 1 || taskNumber - 1 >= projects.get(projectNumber-1).getTasks().size()) {
+                throw new IndexOutOfBoundsException("Переданный индекс вне допустимого диапазона.");
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Вышли за придел списка.");
+            return null;
+        }catch (NullPointerException e) {
+            System.out.println("Обнаружен null объект.");
+            return null;
+        }
+
+        try {
+            return projects.get(projectNumber - 1).completedTask(taskNumber - 1);
+        } catch (NullPointerException e) {
+            System.out.println("Извините, что-то пошло не так.");
+            return null;
+        }
     }
 
     public void addProject(Project newProject) {
@@ -27,14 +49,22 @@ public class Archive {
         projects.add(newProject);
     }
 
-    public void addTaskToProject(int index, String description) {
-        if (projects == null || description == null) {
-            throw new NullPointerException("Переданный объект равен: null.");
+    public boolean addTaskToProject(int index, String description) {
+        try {
+            checkIsNotNull(projects);
+            checkIsNotNull(description);
+
+            checkIndex(index);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Индекс за пределами списка.");
+            return false;
+        } catch (NullPointerException e) {
+            System.out.println("Обнаружен null объект.");
+            return false;
         }
 
-        checkIndex(index);
-
         projects.get(index - 1).addTask(new Task(description));
+        return true;
     }
 
     @Override
@@ -54,6 +84,12 @@ public class Archive {
         }
 
         return String.valueOf(projectList);
+    }
+
+    private static void checkIsNotNull(Object object) {
+        if (object == null) {
+            throw new NullPointerException("Переданное значение в равно null.");
+        }
     }
 
     private void checkIndex(int index) {

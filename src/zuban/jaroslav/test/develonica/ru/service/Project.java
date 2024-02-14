@@ -15,6 +15,10 @@ public class Project {
         return heading;
     }
 
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
     public void addTask(Task newTask) {
         if (tasks == null) {
             tasks = new ArrayList<>();

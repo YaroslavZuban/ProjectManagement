@@ -1,5 +1,6 @@
 package zuban.jaroslav.test.develonica.ru.controller;
 
+import zuban.jaroslav.test.develonica.ru.file_job.DataSave;
 import zuban.jaroslav.test.develonica.ru.service.Archive;
 import zuban.jaroslav.test.develonica.ru.service.Project;
 import zuban.jaroslav.test.develonica.ru.service.Task;
@@ -10,6 +11,7 @@ import java.util.Scanner;
 
 public class Menu {
     private final Archive archive = new Archive();
+    private final DataSave dataSave = new DataSave();
 
     public void run() {
         Scanner scanner = new Scanner(System.in);
@@ -43,6 +45,8 @@ public class Menu {
                     }
                     case (5) -> {
                         System.out.println("До свидания!");
+                        dataSave.save(archive);
+
                         System.exit(0);
                     }
                     default -> System.out.println("Такой команды не существует!");
@@ -76,10 +80,16 @@ public class Menu {
         System.out.print("Введите описание задачи: ");
         String taskDescription = scanner.nextLine();
 
-        archive.addTaskToProject(projectAddTaskNumber, taskDescription);
+        try {
+            boolean isCompleted = archive.addTaskToProject(projectAddTaskNumber, taskDescription);
 
-        System.out.println("Задача успешно добавлена к проекту \"" +
-                archive.getProjectIndex(projectAddTaskNumber).getHeading() + "\"");
+            if (isCompleted) {
+                System.out.println("Задача успешно добавлена к проекту \"" +
+                        archive.getProjectIndex(projectAddTaskNumber).getHeading() + "\"");
+            }
+        }catch (NullPointerException e){
+            System.out.println();
+        }
     }
 
     private void completeTask(Scanner scanner) {
@@ -93,6 +103,8 @@ public class Menu {
 
         Task task = archive.completeTaskInProject(taskNumber, projectNumber);
 
-        System.out.println("Задача " + task.getDescription() + " выполнена");
+        if (task != null) {
+            System.out.println("Задача " + task.getDescription() + " выполнена");
+        }
     }
 }
