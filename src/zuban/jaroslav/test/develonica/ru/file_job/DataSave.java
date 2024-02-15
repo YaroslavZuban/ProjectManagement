@@ -22,25 +22,17 @@ public class DataSave {
     }
 
     private void writeProject(FileWriter writer, List<Project> projects) throws IOException {
-        for (int i = 0; i < projects.size(); i++) {
-            Project project = projects.get(i);
-
+        for (Project project : projects) {
             writer.write("Project:");
             writer.write(System.lineSeparator());
 
             writer.write(project.getHeading());
-
-            if (i + 1 != projects.size()) {
-                writer.write(System.lineSeparator());
-            }
+            writer.write(System.lineSeparator());
 
             List<Task> tasks = project.getTasks();
 
             if (tasks != null) {
                 writeTask(writer, tasks);
-            }
-
-            if (i + 1 != projects.size()) {
                 writer.write(System.lineSeparator());
             }
         }
