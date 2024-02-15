@@ -10,13 +10,11 @@ import java.util.Scanner;
 
 public class ProjectController {
     private Container container;
-    private final DataSave dataSave;
+    private final DataSave dataSave = new DataSave();
 
-    public ProjectController() {
-        this.dataSave = new DataSave();
-    }
+    private final Scanner scanner = new Scanner(System.in);
 
-    public void addProject(Scanner scanner) {
+    public void addProject() {
         System.out.print("Введите название проекта: ");
         String project = scanner.nextLine();
 
@@ -31,7 +29,7 @@ public class ProjectController {
         System.out.println(container);
     }
 
-    public void addTask(Scanner scanner) {
+    public void addTask() {
         System.out.print("Введите номер проекта для добавления задачи: ");
         int projectAddTaskNumber = scanner.nextInt();
 
@@ -53,7 +51,7 @@ public class ProjectController {
         }
     }
 
-    public void completeTask(Scanner scanner) {
+    public void completeTask() {
         System.out.print("Введите номер проекта: ");
         int projectNumber = scanner.nextInt();
         scanner.nextLine();
@@ -77,5 +75,14 @@ public class ProjectController {
 
     public void write() {
         container = new DataWrite().write();
+    }
+
+    public int stepSelect() {
+        System.out.print("Выберите действие (ввидете номер): ");
+
+        int numberTask = scanner.nextInt();
+        scanner.nextLine();
+
+        return numberTask;
     }
 }

@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class Menu {
     private final ProjectController projectController = new ProjectController();
-    private final Scanner scanner = new Scanner(System.in);
 
     public void run() {
         System.out.println("Добро пожаловать в приложение \"Управление проектами\"!");
@@ -19,23 +18,20 @@ public class Menu {
             projectController.write();
 
             while (true) {
-                System.out.print("Выберите действие (ввидете номер): ");
-
-                int numberTask = scanner.nextInt();
-                scanner.nextLine();
+                int numberTask = projectController.stepSelect();
 
                 switch (numberTask) {
                     case (1) -> {
-                        projectController.addProject(scanner);
+                        projectController.addProject();
                     }
                     case (2) -> {
                         projectController.printProject();
                     }
                     case (3) -> {
-                        projectController.addTask(scanner);
+                        projectController.addTask();
                     }
                     case (4) -> {
-                        projectController.completeTask(scanner);
+                        projectController.completeTask();
                     }
                     case (5) -> {
                         System.out.println("До свидания!");
