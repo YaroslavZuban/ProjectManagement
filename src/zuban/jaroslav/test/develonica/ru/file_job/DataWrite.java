@@ -12,7 +12,17 @@ public class DataWrite {
     private final static String DATA_FILE = "data_save.txt";
 
     public Container write() {
-        try (BufferedReader br = new BufferedReader(new FileReader(DATA_FILE))) {
+        File file = new File(DATA_FILE);
+
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            file.createNewFile();
+        } catch (IOException e) {
+            System.out.println("Файл не получилось создать.");
+            return null;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
 
             List<Project> projects = new ArrayList<>();
