@@ -8,6 +8,11 @@ public class Task {
         this.description = description;
     }
 
+    public Task(boolean isCompleted, String description) {
+        this.isCompleted = isCompleted;
+        this.description = description;
+    }
+
     public String getDescription() {
         return description;
     }

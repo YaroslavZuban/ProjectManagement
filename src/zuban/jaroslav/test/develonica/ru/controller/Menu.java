@@ -1,16 +1,16 @@
 package zuban.jaroslav.test.develonica.ru.controller;
 
 import zuban.jaroslav.test.develonica.ru.file_job.DataSave;
-import zuban.jaroslav.test.develonica.ru.service.Archive;
+import zuban.jaroslav.test.develonica.ru.file_job.DataWrite;
+import zuban.jaroslav.test.develonica.ru.service.Container;
 import zuban.jaroslav.test.develonica.ru.service.Project;
 import zuban.jaroslav.test.develonica.ru.service.Task;
 
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-    private final Archive archive = new Archive();
+    private Container container;
     private final DataSave dataSave = new DataSave();
 
     public void run() {
@@ -24,6 +24,8 @@ public class Menu {
         System.out.println("5. Выход");
 
         try {
+            container = new DataWrite().write();
+
             while (true) {
                 System.out.print("Выберите действие (ввидете номер): ");
 
@@ -45,7 +47,7 @@ public class Menu {
                     }
                     case (5) -> {
                         System.out.println("До свидания!");
-                        dataSave.save(archive);
+                        dataSave.save(container);
 
                         System.exit(0);
                     }
@@ -53,6 +55,8 @@ public class Menu {
                 }
             }
         } catch (InputMismatchException e) {
+            dataSave.save(container);
+
             System.out.println("Извините, что-то пошло не так.");
         }
     }
@@ -61,14 +65,15 @@ public class Menu {
         System.out.print("Введите название проекта: ");
         String project = scanner.nextLine();
 
-        archive.addProject(new Project(project));
+        container.addProject(new Project(project));
+        dataSave.save(container);
 
         System.out.println("Проект успешно создан.");
     }
 
     private void printProject(Scanner scanner) {
         System.out.println("Список проектов:");
-        System.out.println(archive);
+        System.out.println(container);
     }
 
     private void addTask(Scanner scanner) {
@@ -81,14 +86,16 @@ public class Menu {
         String taskDescription = scanner.nextLine();
 
         try {
-            boolean isCompleted = archive.addTaskToProject(projectAddTaskNumber, taskDescription);
+            boolean isCompleted = container.addTaskToProject(projectAddTaskNumber, taskDescription);
 
             if (isCompleted) {
                 System.out.println("Задача успешно добавлена к проекту \"" +
-                        archive.getProjectIndex(projectAddTaskNumber).getHeading() + "\"");
+                        container.getProjectIndex(projectAddTaskNumber).getHeading() + "\"");
+
+                dataSave.save(container);
             }
-        }catch (NullPointerException e){
-            System.out.println();
+        } catch (NullPointerException e) {
+            System.out.println("Упс, что-то пошло не так.");
         }
     }
 
@@ -101,10 +108,12 @@ public class Menu {
         int taskNumber = scanner.nextInt();
         scanner.nextLine();
 
-        Task task = archive.completeTaskInProject(taskNumber, projectNumber);
+        Task task = container.completeTaskInProject(taskNumber, projectNumber);
 
         if (task != null) {
             System.out.println("Задача " + task.getDescription() + " выполнена");
         }
+
+        dataSave.save(container);
     }
 }

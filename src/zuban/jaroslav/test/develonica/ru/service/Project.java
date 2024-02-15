@@ -37,6 +37,9 @@ public class Project {
         Task task = tasks.get(numberTask);
         task.isCompleted();
 
+        tasks.remove(numberTask);
+        tasks.add(task);
+
         return task;
     }
 
@@ -61,7 +64,7 @@ public class Project {
             if (isCompleted == task.getIsCompleted()) {
                 info.append(task);
 
-                if (i + 1 != tasks.size() || !isCompleted) {
+                if (i + 1 != tasks.size()) {
                     info.append(System.lineSeparator());
                 }
             }

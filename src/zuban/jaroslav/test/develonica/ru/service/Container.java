@@ -3,8 +3,12 @@ package zuban.jaroslav.test.develonica.ru.service;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Archive {
+public class Container {
     private List<Project> projects;
+
+    public Container(List<Project> projects) {
+        this.projects = projects;
+    }
 
     public Project getProjectIndex(int index) {
         checkIndex(index);
@@ -22,13 +26,13 @@ public class Archive {
 
             checkIndex(projectNumber);
 
-            if (0 > taskNumber - 1 || taskNumber - 1 >= projects.get(projectNumber-1).getTasks().size()) {
+            if (0 > taskNumber - 1 || taskNumber - 1 >= projects.get(projectNumber - 1).getTasks().size()) {
                 throw new IndexOutOfBoundsException("Переданный индекс вне допустимого диапазона.");
             }
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Вышли за придел списка.");
             return null;
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             System.out.println("Обнаружен null объект.");
             return null;
         }
@@ -76,7 +80,7 @@ public class Archive {
         StringBuilder projectList = new StringBuilder();
 
         for (int i = 0; i < projects.size(); i++) {
-            projectList.append((i + 1)).append(" ").append(projects.get(i));
+            projectList.append((i + 1)).append(". ").append(projects.get(i));
 
             if (i + 1 != projects.size()) {
                 projectList.append(System.lineSeparator());// рассматриваю все OS
